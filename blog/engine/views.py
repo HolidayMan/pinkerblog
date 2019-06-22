@@ -1,15 +1,42 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
 from .models import Post, Tag
+from .utils import DetailMixin
+from .forms import TagCreateForm
 
 def index(request):
-    posts = list(Post.objects.all())[-5:]
+    posts = list(Post.objects.all())[::-1]
     return render(request, 'engine/index.html', context={"posts": posts})
 
 
-class PostDetail(View):
-    def get(self, request, slug):
-        post = get_object_or_404(Post, slug__iexact=slug)
-        return render(request, "engine/post_detail.html", context={"post": post})
+class PostDetail(DetailMixin, View):
+    model = Post
+    template = "engine/post_detail.html"
+
+
+class TagDetail(DetailMixin, View):
+    model = Tag
+    template = "engine/tag_detail.html"
+
+
+class TagList(View):
+    def get(self, request):
+        tags = Tag.objects.all()
+        return render(request, 'engine/tag_list.html', context={'tags': tags})
+
+
+class TagCreate(View):
+    def get(self, request):
+        form = TagCreateForm()
+        return render(request, 'engine/tag_create.html', context={'form': form})
+
+
+    def post(self, request):
+        bound_form = TagCreateForm(request.POST)
+
+        if bound_form.is_valid():
+            new_tag = bound_form.save()
+            return redirect(new_tag)
+        return render(request, 'engine/tag_create.html', context={'form': bound_form})
