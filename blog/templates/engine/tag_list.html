@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Tag list - {{ block.super }}{% endblock title %}
+
+{% block content %}
+
+        <h1>Tags:</h1>
+        {% for tag in tags %}
+        <p>
+            <a href="{{tag.get_absolute_url}}" class="text-decoration-none badge badge-primary text-wrap" style="font-size: 30px; ">
+                {{tag.title}}
+            </a>
+        </p>
+        {% endfor %}
+    
+{% endblock content %}
