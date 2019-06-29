@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.shortcuts import get_object_or_404
 from .models import Post, Tag
 from .utils import DetailMixin
-from .forms import TagCreateForm
+from .forms import TagCreateForm, PostCreateForm
 
 def index(request):
     posts = list(Post.objects.all())[::-1]
@@ -19,6 +19,20 @@ class PostDetail(DetailMixin, View):
 class TagDetail(DetailMixin, View):
     model = Tag
     template = "engine/tag_detail.html"
+
+
+class PostCreate(View):
+    def get(self, request):
+        form = PostCreateForm()
+        return render(request, 'engine/post_create.html', context={'form': form})
+
+
+    def post(self, request):
+        bound_form = PostCreateForm(request.POST)
+        if bound_form.is_valid():
+            new_post = bound_form.save()
+            return redirect(new_post)
+        return render(request, 'engine/post_create.html', context={'form': bound_form})
 
 
 class TagList(View):
@@ -40,3 +54,4 @@ class TagCreate(View):
             new_tag = bound_form.save()
             return redirect(new_tag)
         return render(request, 'engine/tag_create.html', context={'form': bound_form})
+
