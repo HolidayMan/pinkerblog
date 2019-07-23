@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Post creation - {{ block.super }}{% endblock title %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'engine/style.css' %}">
+{% endblock head %}
 
 {% block content %}
         <h1>Post creation</h1>

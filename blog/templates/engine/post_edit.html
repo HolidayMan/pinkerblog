@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit post "{{ post.title|title }}" - {{ block.super }}{% endblock title %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'engine/style.css' %}">
+{% endblock head %}
+
+{% block content %}
+        <h1>Edit post "{{ post.title }}"</h1>
+        <form action="{% url 'post_edit_url' slug=post.slug%}" method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    {{field.label}}
+                    {{field}}
+                    {% if field.errors %}
+                        <div class="alert alert-danger">
+                            {{field.errors}}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">Update post</button>
+
+        </form>
+            <a href="{{post.get_delete_url}}"><button class="btn btn-danger">Delete</button></a>
+
+{% endblock content %}

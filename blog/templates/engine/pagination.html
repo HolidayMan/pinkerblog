@@ -1,0 +1,50 @@
+<div aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if page.number > 3 %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">First</span>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% if page.number != 1 %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% for n in page.paginator.page_range %}
+            {% if n > page.number|add:"-3" and n < page.number|add:"3" %}
+                {% if n == page.number %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if page.number != page.paginator.num_pages %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+
+
+        {% if page.number < page.paginator.num_pages|add:"-2" %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true">Last</span>
+                </a>
+            </li>
+        {% endif %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'posts_list_all_url' %}" aria-label="All">
+                <span aria-hidden="true">All</span>
+            </a>
+        </li>
+    </ul>
+</div>

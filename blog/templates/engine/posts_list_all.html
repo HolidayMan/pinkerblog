@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Index page - {{ block.super }}{% endblock title %}
+
+{% block content %}
+    <h1 class="mb-5">Posts:</h1>
+    {% for post in posts %}
+
+        {% include "engine/post_card.html" %}
+        
+    {% endfor %}
+    
+    
+{% endblock content %}

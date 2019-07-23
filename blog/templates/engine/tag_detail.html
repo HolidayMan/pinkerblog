@@ -6,11 +6,17 @@
 
 {% block content %}
     <h1 class="mb-5">Posts with "{{ tag.title }}" tag:</h1>
-    {% for post in tag.posts.all %}
+    <a href="{{tag.get_edit_url}}"><button class="btn btn-success ml-3">Edit this tag</button></a>
+    <a href="{{tag.get_delete_url}}"><button class="btn btn-danger ml-3">Delete this tag</button></a>
 
-        {% include "engine/post_card.html" %}
+    <div class="container mt-3">
+        {% for post in tag.posts.all %}
+
+            {% include "engine/post_card.html" %}
         
-        {% empty %}
-        <p>No posts are related with this tag</p>
-    {% endfor %}
+            {% empty %}
+            <p>No posts are related with this tag</p>
+        {% endfor %}
+    </div>
+    
 {% endblock content %}
