@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.utils.text import slugify
 from time import time
@@ -15,6 +16,7 @@ class Post(models.Model):
     title = models.CharField("Title of post", max_length=40)
     body = models.CharField("Text of post", max_length=3000)
     tags = models.ManyToManyField("Tag", blank=True, related_name="posts")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author", verbose_name="Author of post", blank=False)
     date = models.DateTimeField("Date", auto_now_add=True)
 
 
@@ -42,6 +44,7 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-date']
+        permissions = (("can_edit", "Edit post"), ("can_create", "Create post"), ("can_delete", "Delete post"))
 
 
 class Tag(models.Model):
