@@ -1,6 +1,7 @@
 <div class="card mb-5">
       <div class="card-header">
         <h5>{{post.date}}</h5>
+        <div class="float-right">{{ post.author }}</div>
         <a href="{{post.get_edit_url}}"><button class="btn btn-success">edit</button></a>
         <a href="{{post.get_delete_url}}"><button class="btn btn-danger">delete</button></a>
       </div>
