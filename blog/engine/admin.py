@@ -10,11 +10,7 @@ def truncate_words(string, num):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("slug", "title", "display_body", "display_tags", "display_author", "date")
-
-    def display_author(self, obj):
-        return obj.author
-    display_author.short_description = "Author"
+    list_display = ("slug", "title", "display_body", "display_tags", "author", "date")
 
     def display_body(self, obj):
         return truncate_words(obj.body, 15)
