@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 
+def check_permissions(user, post):
+    if user.username == post.author.username or user.is_staff:
+        return True
+    return False
+
 class ObjectDetailMixin:
 
     model = None
@@ -59,7 +64,7 @@ class ObjectDeleteMixin:
     def post(self, request, slug):
         obj = self.model.objects.get(slug__iexact=slug)
         obj.delete()
-        return redirect("index_url")      
+        return redirect("posts_list_url")      
 
 
 class Englishficator:
@@ -71,10 +76,10 @@ class Englishficator:
         'д': 'd', 
         'е': 'e', 
         'ё': 'yo', 
-        'ж': 'j', 
+        'ж': 'zh', 
         'з': 'z', 
         'и': 'i', 
-        'й': 'y', 
+        'й': 'j', 
         'к': 'k', 
         'л': 'l', 
         'м': 'm', 
@@ -90,9 +95,9 @@ class Englishficator:
         'ц': 'c', 
         'ч': 'ch', 
         'ш': 'sh', 
-        'щ': 'sch', 
-        'ь': '\'', 
-        'ы': 'i', 
+        'щ': 'sc', 
+        'ь': '', 
+        'ы': 'y', 
         'ъ': '', 
         'э': 'e', 
         'ю': 'yu', 
