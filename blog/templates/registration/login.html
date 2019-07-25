@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if form.errors %}
-<p>Your username or password didn't match. Please try again.</p>
+    <p>Your username or password didn't match. Please try again.</p>
 {% endif %}
 {% comment %} 
 {% if next %}
@@ -23,8 +23,8 @@
             <div>
                 <td>{{ form.username.label_tag }}</td>
                 <td>{{ form.username }}</td>
-                </div>
-                <div>
+            </div>
+            <div>
                 <td>{{ form.password.label_tag }}</td>
                 <td>{{ form.password }}</td>
             </div>
