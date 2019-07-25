@@ -5,10 +5,14 @@ from django.utils.text import slugify
 from time import time
 from .utils import Englishficator
 
-def gen_slug(s):
+
+def gen_slug(s, slug=None):
     eng = Englishficator()
-    slug = slugify(eng(s))
-    return slug + str(int(time()))
+    return_slug = slugify(eng(s if not slug else slug))
+    if slug:
+        return return_slug
+    else:
+        return return_slug + str(int(time()))
 
 
 class Post(models.Model):
@@ -34,7 +38,9 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.slug = gen_slug(self.title)
+            self.slug = gen_slug(self.title, self.slug)
+            if self.slug in [post.slug for post in Post.objects.all()]:
+                self.slug = gen_slug(self.title)
         super().save(*args, **kwargs)
 
 
