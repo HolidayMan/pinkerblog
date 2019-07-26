@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from .models import Post, Tag
 from .utils import ObjectDetailMixin, ObjectCreateMixin, ObjectEditMixin, ObjectDeleteMixin, check_permissions
@@ -33,7 +33,8 @@ class TagDetail(ObjectDetailMixin, View):
     template = "engine/tag_detail.html"
 
 
-class PostCreate(LoginRequiredMixin, View):
+class PostCreate(PermissionRequiredMixin, View):
+    permission_required = "engine.add_post"
     def get(self, request):
         form = PostCreateForm
         return render(request, 'engine/post_create.html', context={'form': form})
@@ -58,13 +59,16 @@ class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     template = 'engine/tag_create.html'
 
 
-class PostEdit(LoginRequiredMixin, View):
+
+class PostEdit(PermissionRequiredMixin, View):
+    permission_required = "engine.change_post"
     def get(self, request, slug):
         post = get_object_or_404(Post, slug__iexact=slug)
         if check_permissions(request.user, post):
             bound_form = PostForm(instance=post)
             return render(request, 'engine/post_edit.html', context={'form': bound_form, 'post': post})
         return render(request, 'errors/forbidden.html', status=403)
+        # return HttpResponse(status=403)
 
     def post(self, request, slug):
         post = get_object_or_404(Post, slug__iexact=slug)
@@ -80,20 +84,20 @@ class PostEdit(LoginRequiredMixin, View):
 
     
 
-class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
-    template = "engine/post_delete_form.html"
+class PostDelete(PermissionRequiredMixin, View):
+    permission_required = "engine.delete_post"
     def get(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         if check_permissions(request.user, post):
             return render(request, self.template, context={'post': post})
-        return render(request, 'errors/forbidden.html')
+        return render(request, 'errors/forbidden.html', status=403)
 
     def post(self, request, slug):
         post = Post.objects.get(slug__iexact=slug)
         if check_permissions(request.user, post):
             post.delete()
             return redirect("posts_list_url")
-        return render(request, 'errors/forbidden.html')
+        return render(request, 'errors/forbidden.html', status=403)
 
 
 

@@ -3,9 +3,13 @@
         <h5>{{post.date}}</h5>
         <div class="float-right">{{ post.author }}</div>
         {% if user.is_authenticated %}
-          {% if user.username == post.author.username or user.is_staff %}
-            <a href="{{post.get_edit_url}}"><button class="btn btn-success">edit</button></a>
-            <a href="{{post.get_delete_url}}"><button class="btn btn-danger">delete</button></a>
+          {% if user == post.author or user.is_staff %}
+            {% comment %} {% if user.has_change_permission or user.is_staff %} {% endcomment %}
+              <a href="{{post.get_edit_url}}"><button class="btn btn-success">edit</button></a>
+            {% comment %} {% endif %} {% endcomment %}
+            {% comment %} {% if user.has_delete_permission or user.is_staff %} {% endcomment %}
+              <a href="{{post.get_delete_url}}"><button class="btn btn-danger">delete</button></a>
+            {% comment %} {% endif %} {% endcomment %}
           {% endif %}
         {% endif %}
       </div>
