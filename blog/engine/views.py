@@ -17,10 +17,11 @@ class PostList(View):
         return render(request, 'engine/posts_list.html', context={"page": page})
 
 
-class PostListAll(View):
-    def get(self, request):
-        posts = Post.objects.all()
-        return render(request, 'engine/posts_list_all.html', context={"posts": posts})        
+
+class UserPostsList(View):
+    def get(self, request, username):
+        posts = Post.objects.filter(author__username=username)
+        return render(request, 'engine/user_posts_list.html', context={'posts': posts, 'author': username})
 
 
 class PostDetail(ObjectDetailMixin, View):

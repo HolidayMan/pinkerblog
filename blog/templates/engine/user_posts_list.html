@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ author }}'s posts:</h1>
+    {% for post in posts %}
+        {% include 'engine/post_card.html' %}
+        {% empty %}
+        <h3>You don't have any posts</h3>
+    {% endfor %}
+{% endblock content %}
