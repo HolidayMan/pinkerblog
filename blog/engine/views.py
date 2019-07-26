@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -10,11 +11,19 @@ from .forms import TagForm, PostForm, PostCreateForm
 
 class PostList(View):
     def get(self, request):
-        posts = Post.objects.all()
+        sq = request.GET.get('search_query', '')
+        if sq:
+            posts = Post.objects.filter(Q(body__icontains=sq) | Q(title__icontains=sq) | Q(author__username__icontains=sq))
+        else:
+            posts = Post.objects.all()
         page_num = request.GET.get('page', 1)
         paginator = Paginator(posts, 3)
         page = paginator.page(page_num)
-        return render(request, 'engine/posts_list.html', context={"page": page})
+        context = {
+            "page": page,
+            "search_query": sq
+        }
+        return render(request, 'engine/posts_list.html', context=context)
 
 
 

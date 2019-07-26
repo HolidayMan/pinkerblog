@@ -3,15 +3,23 @@
 {% block title %}Index page - {{ block.super }}{% endblock title %}
 
 {% block content %}
-    <h1 class="mb-5">Posts:</h1>
-    {% for post in page %}
+    <h1 class="mb-5">{% if search_query %}{{ search_query }}{% else %}Posts:{% endif %}</h1>
+    {% if page %}
+        {% for post in page %}
 
-        {% include "engine/post_card.html" %}
-        
-    {% endfor %}
-    <div class="offset-md-3">
-        {% include 'engine/pagination.html' %}
-    </div>
+            {% include "engine/post_card.html" %}
+            
+        {% endfor %}
+        <div class="offset-md-3">
+            {% include 'engine/pagination.html' %}
+        </div>
+    
+    {% else %}
+
+        No posts for {{ search_query }}
+
+    {% endif %}
+    
     
     
 {% endblock content %}
