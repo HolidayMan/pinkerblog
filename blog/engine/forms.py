@@ -1,7 +1,7 @@
 from django import forms
 from .models import Tag, Post
 from django.core.exceptions import ValidationError
-
+    
 
 class PostForm(forms.ModelForm):
     
@@ -26,8 +26,7 @@ class PostForm(forms.ModelForm):
     
 
 class PostCreateForm(forms.Form):
-    author = None
-
+    
     title = forms.CharField(max_length=50)
     slug = forms.SlugField(allow_unicode=True, max_length=50, required=False)
     body = forms.CharField(widget=forms.Textarea(attrs={}))
