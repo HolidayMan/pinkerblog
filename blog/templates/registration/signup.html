@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Registration</h1>
+    {% if user.is_authenticated %}
+        <p>You are already logged in</p>
+        <a href="{% url 'logout' %}?next={{ request.path }}"><button class="btn btn-secondary">Logout</button></a>
+    {% else %}
+        <form action="{% url 'signup_url' %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {% if field.errors %}
+                        <div class="alert alert-danger">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                    {{ field.label }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Sign up</button>
+        </form>
+    {% endif %}
+{% endblock content %}
