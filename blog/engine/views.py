@@ -13,7 +13,7 @@ class PostList(View):
     def get(self, request):
         sq = request.GET.get('search_query', '')
         if sq:
-            posts = Post.objects.filter(Q(body__icontains=sq) | Q(title__icontains=sq) | Q(author__username__icontains=sq))
+            posts = self.get_posts_by_sq(sq)
         else:
             posts = Post.objects.all()
         page_num = request.GET.get('page', 1)
@@ -24,6 +24,16 @@ class PostList(View):
             "search_query": sq
         }
         return render(request, 'engine/posts_list.html', context=context)
+    
+    
+    def get_posts_by_sq(self, sq):
+        posts = set(Post.objects.filter(Q(body__icontains=sq) | Q(title__icontains=sq) | Q(author__username__icontains=sq)))
+        tags = Tag.objects.filter(title__icontains=sq)
+        if tags.exists():
+            for tag in tags:
+                posts.update(set(tag.posts.all()))
+        posts = sorted(list(posts), key=lambda post: post.id, reverse=True)
+        return posts
 
 
 
