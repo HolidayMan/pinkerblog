@@ -50,7 +50,7 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-date']
-        permissions = (("can_edit", "Edit post"), ("can_create", "Create post"), ("can_delete", "Delete post"))
+        # permissions = (("can_edit", "Edit post"), ("can_create", "Create post"), ("can_delete", "Delete post"))
 
 
 class Tag(models.Model):
