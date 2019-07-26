@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'registration/style.css' %}">
+{% endblock head %}
+{% block content %}
+    <h2>{{ user.username }} profile</h2>
+    <div class="container">
+        <div class="row col-4">
+            <ul class="no-bullet">
+                <li>
+                    <p><a href="{% url 'user_posts_list_url' username=user.username %}">My posts</a></p>
+                </li>
+                <li>
+                    <p><a href="{% url 'post_create_url' %}">Create new post</a></p>
+                </li>
+                <li>
+                    <p><a href="{% url 'logout' %}">Logout</a></p>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+{% endblock content %}
