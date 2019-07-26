@@ -19,7 +19,7 @@ from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^accounts/signup/', include('signup.urls')),
+    re_path(r'^accounts/', include('signup.urls')),
     re_path(r'^accounts/', include('django.contrib.auth.urls')),
     path('', blog_redirect),
     path('', include('engine.urls'))
